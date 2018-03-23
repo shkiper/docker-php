@@ -1,0 +1,29 @@
+version: '2'
+services:
+    web:
+        build:
+            context: ./
+            dockerfile: web.docker
+        volumes:
+            - ../:/var/www
+        ports:
+            - "8080:80"
+        links:
+            - app
+    app:
+        build:
+            context: ./
+            dockerfile: app.docker
+        volumes:
+            - ../:/var/www
+        links:
+            - database
+    database:
+        image: mysql:latest
+        environment:
+            - "MYSQL_ROOT_PASSWORD=root"
+            - "MYSQL_DATABASE=dbname"
+        ports:
+            - "33066:3306"
+        volumes:
+            - ./data:/var/lib/mysql
